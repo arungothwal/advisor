@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
+import datetime
 from pathlib import Path
 import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user',
     'rest_framework',
-
+    'rest_framework.authtoken',
 ]
 
 AUTH_USER_MODEL = 'user.User'
@@ -53,7 +54,18 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 
 }
-
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=2),
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': False,
+    'JWT_LEEWAY': 0,
+    'JWT_AUDIENCE': None,
+    'JWT_ISSUER': None,
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_PAYLOAD_GET_USER_ID_HANDLER': 'jwt_auth.utils.jwt_get_user_id_from_payload_handler',
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -143,5 +155,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# managing media
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
 
 django_heroku.settings(locals())

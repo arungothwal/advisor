@@ -69,3 +69,11 @@ class User(AbstractBaseUser,PermissionsMixin):
     class Meta:
         verbose_name = ('user')
         verbose_name_plural = ('users')
+
+
+class Advisor(models.Model):
+    name = models.CharField(max_length=20,blank=True,null=True)
+    pic = models.ImageField(upload_to="advisor/images",default='')
+
+    def __str__(self):
+        return str(self.id)
