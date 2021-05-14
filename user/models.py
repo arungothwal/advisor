@@ -7,7 +7,9 @@ from django.contrib.sessions.models import Session
 import jwt
 from django.conf import settings
 from rest_framework_jwt.utils import jwt_payload_handler
+
 # Create your models here.
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -74,6 +76,15 @@ class User(AbstractBaseUser,PermissionsMixin):
 class Advisor(models.Model):
     name = models.CharField(max_length=20,blank=True,null=True)
     pic = models.ImageField(upload_to="advisor/images",default='')
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Booking(models.Model):
+    user_id = models.ForeignKey(User,on_delete=models.CASCADE)
+    advisor_id =models.ForeignKey(Advisor,related_name='booking',on_delete=models.CASCADE)
+    booking_time = models.DateTimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
         return str(self.id)
